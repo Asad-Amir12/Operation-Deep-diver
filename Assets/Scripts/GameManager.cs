@@ -4,10 +4,12 @@ using TMPro;
 using System.Collections;
 public class GameManager : MonoBehaviour
 {
+#region Fields
     [Header("Dependencies")]
     [SerializeField] private StabilizerController stabilizer;
     [SerializeField] private TextMeshProUGUI timerText; 
     [SerializeField] private TextMeshProUGUI warningText; 
+    
 
     [Header("Win Condition")]
     [SerializeField] private int timeToWin = 45;
@@ -17,15 +19,25 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float minTorque = 5f;
     [SerializeField] private float maxTorque = 15f;
 
+#endregion
+
+#region State Variables
     private float gameTimer;
     private float currentTimer;
     private int lastSecondPrinted;
     private bool isGameOver = false;
-private int timeRemaining;
+    private int timeRemaining;
     private WaitForSeconds warningDuration ;
     private WaitForSeconds ws_1;
     public static GameManager Instance { get; private set; }
     
+#endregion
+
+#region Events
+
+public static event System.Action OnGameOver;
+public static event System.Action OnGameWin;
+#endregion
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -118,7 +130,7 @@ private int timeRemaining;
 
         isGameOver = true;
         Debug.Log("Game Over! " + reason);
-       
+        OnGameOver?.Invoke();
     }
 
     private void WinGame()
@@ -127,6 +139,7 @@ private int timeRemaining;
         StopCoroutine(Timer());
         isGameOver = true;
         Debug.Log("You Survived!");
+        OnGameWin?.Invoke();
        
     }
 }
