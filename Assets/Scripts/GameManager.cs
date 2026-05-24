@@ -130,6 +130,7 @@ public static event System.Action OnGameWin;
 
         isGameOver = true;
         Debug.Log("Game Over! " + reason);
+        stabilizer.enabled = false; // Disable player control
         OnGameOver?.Invoke();
     }
 
@@ -139,6 +140,7 @@ public static event System.Action OnGameWin;
         StopCoroutine(Timer());
         isGameOver = true;
         Debug.Log("You Survived!");
+        stabilizer.enabled = false; // Disable player control
         OnGameWin?.Invoke();
        
     }
